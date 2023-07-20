@@ -15,5 +15,8 @@ const bookCtrl = require('../controllers/book');
 router.post('/', auth, multer, bookCtrl.addBook);
 router.get('/', bookCtrl.getAllBooks);
 router.get('/:id', bookCtrl.getOneBook);
+router.put('/:id', auth, multer, bookCtrl.updateBook);
+router.delete('/:id', auth, bookCtrl.deleteBook);
 
+//EXPORT MODULE ROUTEUR 
 module.exports = router;
