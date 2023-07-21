@@ -8,14 +8,14 @@ const User = require('../models/user');
 
 //FUNCTION NOUVEAU UTILISATEUR 
 exports.signup = (req, res, next) => {
-    //Cryptage du mot de passe
+    //Verification si l'adresse email est valide
     User.findOne({ email: req.body.email})
         .then((emailInvalid) => {
             if(emailInvalid){
                 return res.status(409).json({ message: "Adresse email déjà utilisée !!" });
             }
         })
-        
+        //Cryptage du mot de passe
         bcrypt.hash(req.body.password, 10)
             .then(hash => {
                 //Création nouvel utilisateur
