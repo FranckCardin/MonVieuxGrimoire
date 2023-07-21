@@ -9,18 +9,25 @@ const User = require('../models/user');
 //FUNCTION NOUVEAU UTILISATEUR 
 exports.signup = (req, res, next) => {
     //Cryptage du mot de passe
-    bcrypt.hash(req.body.password, 10)
-        .then(hash => {
-            //Création nouvel utilisateur
-            const user = new User({
-                email: req.body.email,
-                password: hash
-            });
-            //Sauvegarde du nouvel utilisateur dans la BDD
-            user.save()
-                .then(() => res.status(201).json({ message: 'utilisateur créé ! ' }))
-                .catch(error => res.status(400).json({ error }));
+    User.findOne({ email: req.body.email})
+        .then((emailInvalid) => {
+            if(emailInvalid){
+                return res.status(409).json({ message: "Adresse email déjà utilisée !!" });
+            }
         })
+        
+        bcrypt.hash(req.body.password, 10)
+            .then(hash => {
+                //Création nouvel utilisateur
+                const user = new User({
+                    email: req.body.email,
+                    password: hash
+                });
+                //Sauvegarde du nouvel utilisateur dans la BDD
+                user.save()
+                    .then(() => res.status(201).json({ message: 'utilisateur créé ! ' }))
+                    .catch(error => res.status(400).json({ error }));
+            })
         .catch(error => res.status(500).json({ error }))
 };
 
