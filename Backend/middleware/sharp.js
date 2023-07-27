@@ -1,5 +1,8 @@
+//IMPORT PACKAGE SHARP
 const sharp = require('sharp');
+//IMPORT PACKAGE FS 
 const fs = require("fs");
+//IMPORT PATH EXPRESS
 const path = require("path");
 
 module.exports = (req, res, next) => {
