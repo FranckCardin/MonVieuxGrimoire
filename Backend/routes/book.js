@@ -14,13 +14,13 @@ const sharp = require('../middleware/sharp');
 const bookCtrl = require('../controllers/book');
 
 //INITIATION DES ROUTES
-router.get('/', bookCtrl.getAllBooks);
-router.get('/:id', bookCtrl.getOneBook);
+router.post('/:id/rating', auth, bookCtrl.ratingBook);
 router.get('/bestrating', bookCtrl.getBestRatingsBooks);
 router.post('/', auth, multer, sharp, bookCtrl.addBook);
+router.get('/', bookCtrl.getAllBooks);
+router.get('/:id', bookCtrl.getOneBook);
 router.put('/:id', auth, multer, sharp, bookCtrl.updateBook);
 router.delete('/:id', auth, bookCtrl.deleteBook);
-router.post('/:id/rating', auth, bookCtrl.ratingBook);
 
 //EXPORT MODULE ROUTEUR 
 module.exports = router;
