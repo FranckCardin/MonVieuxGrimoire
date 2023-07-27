@@ -60,7 +60,7 @@ exports.updateBook = (req, res, next) => {
         .then((book) => {
             //Comparaison des id pour savoir si c'est le bon utilisateur
             if (book.userId != req.auth.userId) {
-                res.status(401).json({ message: "Non Autorisé !"});
+                res.status(403).json({ message: "Non Autorisé !"});
             }
             else{
                 //Récupération du nom de fichier
@@ -87,7 +87,7 @@ exports.deleteBook = (req, res, next) => {
         .then(book => {
             //Comparaison des id pour savoir si c'est le bon utilisateur
             if(book.userId != req.auth.userId){
-                res.status(401).json({ message: " Non autorisé !" });
+                res.status(403).json({ message: " Non autorisé !" });
             } 
             else{
                 //Récupération du nom de fichier
