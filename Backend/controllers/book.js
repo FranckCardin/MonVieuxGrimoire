@@ -63,11 +63,16 @@ exports.updateBook = (req, res, next) => {
                 res.status(401).json({ message: "Non Autorisé !"});
             }
             else{
-                //Mise à jour du livre avec l'objet modifié avec l'id de l'URL
-                Book.updateOne({ _id: req.params.id}, { ...bookObject, _id: req.params.id})
-                    .then(() => res.status(200).json({ message: " Objet modifié!" }))
-                    .catch(error => res.status(401).json({ error }));
-            }
+                //Récupération du nom de fichier
+                const filename = book.imageUrl.split('/images/')[1];
+                //Suppresion par la méthode Unlink du package FS
+                fs.unlink(`/images/${filename}`, () => {
+                    //Mise à jour du livre avec l'objet modifié dans la base de données avec l'id de l'URL
+                    Book.updateOne({ _id: req.params.id}, { ...bookObject, _id: req.params.id})
+                        .then(() => res.status(200).json({ message: " Objet modifié!" }))
+                        .catch(error => res.status(500).json({ error }));
+                })
+            };
         })
         .catch((error) => {
             res.status(400).json({ error });
@@ -103,4 +108,44 @@ exports.deleteBook = (req, res, next) => {
         .catch((error) => {
             res.status(500).json({ error });
         });
+};
+
+//FUNCTION NOTATION LIVRE + MOYENNE NOTES
+exports.ratingBook = (req, res, next) => {
+    Book.findOne({ _id: req.params.id })
+        .then(book => {
+            //Vérification de si l'utilisateur à déjà noté le livre
+            book.ratings.map(rate => {
+                if (req.auth.userId === rate.userId) {
+                    res.status(400).json({ message: "Livre déjà noté par l'utilisateur !" })
+                }
+            })
+            //Mise à jour de la note du livre
+            book.ratings.push({
+                "userId": req.auth.userId,
+                "grade": req.body.rating
+            });
+            //Mise à jour la note du livre moyenne
+            let sum = 0;
+            book.ratings.map(rate => sum += rate.grade);
+            book.averageRating = sum / book.ratings.length;
+            //Mise à jour du livre dans la base de donnnées avec la nouvelle note du livre
+            Book.updateOne({ _id: req.params.id }, book)
+                .then(() => { res.status(201).json(book) })
+                .catch((error) => { res.status(401).json({ error }) });
+        })
+        .catch((error) => {
+            res.status(400).json({ error });
+        });
+};
+
+//FUNCTION AFFICHER LES 3 MEILLEURS LIVRES
+exports.getBestRatingsBooks = (req, res, next) => {
+    Book.find()
+        //Trier les livres de manière décroissante
+        .sort({ averageRating: -1 })
+        //Limite de 3 livres
+        .limit(3)
+        .then(books => res.status(200).json(books))
+        .catch(error => res.status(400).json({ error }));
 };
