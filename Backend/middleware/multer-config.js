@@ -1,12 +1,7 @@
 //IMPORT PACKAGE MULTER
 const multer = require('multer');
-
-//DICTIONNAIRE DES EXTENSIONS
-const MIME_TYPES = {
-    'image/jpg': 'jpg',
-    'image/jpeg': 'jpg',
-    'image/png': 'png',
-};
+//
+path = require('path');
 
 //ENREGISTREMENT SUR LE DISQUE
 const storage = multer.diskStorage({
@@ -18,11 +13,11 @@ const storage = multer.diskStorage({
     //FUNCTION NOM FICHIER
     filename: (req, file, callback) => {
         //Utilisation du nom d'origine en remplaçant les espaces par des underscores 
-        const name = file.originalname.split(' ').join('_');
-        //Utilisation de la constante dictionnaire Type Mine pour résoudre l'extension de fichier appropriée
-        const extension = MIME_TYPES[file.mimetype];
+        const originalName = file.originalname.split(' ').join('_');
+        //Récupération du nom d'origine sans l'extension dans le nom
+        const newName = path.parse(originalName).name;
         //Ajout d'un timestamp Date.now() comme nom de fichier
-        callback(null, name + Date.now() + '.' + extension);
+        callback(null, newName + Date.now());
     }
 });
 
