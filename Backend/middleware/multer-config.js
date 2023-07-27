@@ -1,7 +1,7 @@
 //IMPORT PACKAGE MULTER
 const multer = require('multer');
 //IMPORT PATH EXPRESS
-path = require('path');
+const path = require('path');
 
 //ENREGISTREMENT SUR LE DISQUE
 const storage = multer.diskStorage({
