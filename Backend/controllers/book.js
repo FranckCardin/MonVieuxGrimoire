@@ -66,7 +66,7 @@ exports.updateBook = (req, res, next) => {
                 //Récupération du nom de fichier
                 const filename = book.imageUrl.split('/images/')[1];
                 //Suppresion par la méthode Unlink du package FS
-                fs.unlink(`/images/${filename}`, () => {
+                fs.unlink(`images/${filename}`, () => {
                     //Mise à jour du livre avec l'objet modifié dans la base de données avec l'id de l'URL
                     Book.updateOne({ _id: req.params.id}, { ...bookObject, _id: req.params.id})
                         .then(() => res.status(200).json({ message: " Objet modifié!" }))
@@ -93,7 +93,7 @@ exports.deleteBook = (req, res, next) => {
                 //Récupération du nom de fichier
                 const filename = book.imageUrl.split('/images/')[1];
                 //Suppresion par la méthode Unlink du package FS
-                fs.unlink(`/images/${filename}`, () => {
+                fs.unlink(`images/${filename}`, () => {
                     //Suppression du livre concerné dans la base de donnée
                     Book.deleteOne({ _id: req.params.id})
                     .then(() => { 
