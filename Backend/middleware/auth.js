@@ -1,6 +1,7 @@
 //IMPORT PACKAGE JSONWEBTOKEN 
 const jwt = require('jsonwebtoken');
 
+//EXPORT MODULE AUTH
 module.exports = (req, res, next) => {
     try {
         //Extraction du token
