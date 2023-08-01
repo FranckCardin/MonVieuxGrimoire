@@ -5,6 +5,7 @@ const fs = require("fs");
 //IMPORT PATH EXPRESS
 const path = require("path");
 
+//EXPORT MODULE SHARP
 module.exports = (req, res, next) => {
     try {
         //Renvoie un objet dont les propriétés représentent des éléments significatifs du chemin
