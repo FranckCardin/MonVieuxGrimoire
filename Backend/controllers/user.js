@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 //IMPORT MODEL USER 
 const User = require('../models/user');
 
-//FUNCTION NOUVEAU UTILISATEUR 
+//EXPORT FUNCTION NOUVEAU UTILISATEUR 
 exports.signup = (req, res, next) => {
     //Verification si l'adresse email est valide
     User.findOne({ email: req.body.email})
